@@ -247,6 +247,7 @@ export class MonthViewComponent implements ICalendarComponent, OnInit, OnChanges
     @Input() lockSwipeToPrev:boolean;
     @Input() lockSwipes:boolean;
     @Input() spaceBetween:number;
+    @Input() holiday: any;
 
     @Output() onRangeChanged = new EventEmitter<IRange>();
     @Output() onEventSelected = new EventEmitter<IEvent>();
@@ -399,8 +400,25 @@ export class MonthViewComponent implements ICalendarComponent, OnInit, OnChanges
         var disabled = false;
         if (this.markDisabled) {
             disabled = this.markDisabled(date);
+           //disabled = true;
         }
-
+        
+        console.log("data teste23")
+        //console.log(JSON.parse(this.holiday))
+        JSON.parse(this.holiday).forEach((dataFeriados: any) => {
+            let data = new Date((new Date()).getFullYear()+"-"+dataFeriados.mes +"-"+ dataFeriados.dia).toLocaleDateString();
+            if (data == date.toLocaleDateString()){
+                let feriado = new Date(data);
+                console.log("entrouaqui")
+                
+                console.log(data)
+                console.log(dataFeriados.descricao)
+                console.log(typeof feriado)
+                console.log("parqou aqui")
+                disabled = true;
+            }
+        });
+       // console.log(date);
         return {
             date: date,
             events: [],

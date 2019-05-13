@@ -8,6 +8,7 @@ export interface IEvent {
     endTime: Date;
     startTime: Date;
     title: string;
+    
 }
 
 export interface IRange {
@@ -156,7 +157,7 @@ export enum Step {
     selector: 'calendar',
     template: `
         <ng-template #monthviewDefaultDisplayEventTemplate let-view="view" let-row="row" let-col="col">
-            {{view.dates[row*7+col].label}}
+             <div [ngClass]="{'holiday': isHoliday(view.dates[row*7+col].date)}">{{view.dates[row*7+col].label}} </div>
         </ng-template>
         <ng-template #monthviewDefaultEventDetailTemplate let-showEventDetail="showEventDetail" let-selectedDate="selectedDate" let-noEventsLabel="noEventsLabel">
             <ion-list class="event-detail-container" has-bouncing="false" *ngIf="showEventDetail" overflow-scroll="false">
@@ -232,10 +233,11 @@ export enum Step {
                 [monthviewEventDetailTemplate]="monthviewEventDetailTemplate||monthviewDefaultEventDetailTemplate"
                 [locale]="locale"
                 [dateFormatter]="dateFormatter"
-                [dir]="dir"
+                [dir]="dir"                
                 [lockSwipeToPrev]="lockSwipeToPrev"
                 [lockSwipes]="lockSwipes"
                 [spaceBetween]="spaceBetween"
+                [holiday]="holiday"
                 (onRangeChanged)="rangeChanged($event)"
                 (onEventSelected)="eventSelected($event)"
                 (onTimeSelected)="timeSelected($event)"
@@ -293,7 +295,7 @@ export enum Step {
                 [lockSwipes]="lockSwipes"
                 [startHour]="startHour"
                 [endHour]="endHour"
-                [spaceBetween]="spaceBetween"
+                [spaceBetween]="spaceBetween"                
                 (onRangeChanged)="rangeChanged($event)"
                 (onEventSelected)="eventSelected($event)"
                 (onTimeSelected)="timeSelected($event)"
@@ -307,7 +309,9 @@ export enum Step {
         .event-detail-container {
           border-top: 2px darkgrey solid;
         }
-
+        .holiday{
+            
+        }
         .no-events-label {
           font-weight: bold;
           color: darkgrey;
@@ -358,6 +362,11 @@ export class CalendarComponent implements OnInit {
         this.calendarService.setCurrentDate(val, true);
         this.onCurrentDateChanged.emit(this._currentDate);
     }
+    isHoliday(){
+        return {
+            disabled: true
+        }
+    }
 
     @Input() eventSource:IEvent[] = [];
     @Input() calendarMode:CalendarMode = 'month';
@@ -400,6 +409,7 @@ export class CalendarComponent implements OnInit {
     @Input() startHour:number = 0;
     @Input() endHour:number = 24;
     @Input() spaceBetween:number = 0;
+    @Input() holiday: object = {};
 
     @Output() onCurrentDateChanged = new EventEmitter<Date>();
     @Output() onRangeChanged = new EventEmitter<IRange>();
