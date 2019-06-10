@@ -381,7 +381,7 @@ export class CalendarComponent implements OnInit {
     @Input() startingDayMonth:number = 0;
     @Input() startingDayWeek:number = 0;
     @Input() allDayLabel:string = 'all day';
-    @Input() noEventsLabel:string = 'No Events';
+    @Input() noEventsLabel:string = 'Sem atendimentos marcados';
     @Input() queryMode:QueryMode = 'local';
     @Input() step:Step = Step.Hour;
     @Input() timeInterval:number = 60;
